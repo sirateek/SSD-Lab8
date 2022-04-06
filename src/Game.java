@@ -9,6 +9,7 @@ public class Game extends JFrame{
     private int boardSize = 20;
     private int mineCount = 40;
     private GridUI gridUI;
+    public static Color[] NUMBER_COLOR = {Color.black, Color.blue, Color.green, Color.red, Color.magenta};
 
     public Game() {
         board = new Board(boardSize, mineCount);
@@ -104,7 +105,12 @@ public class Game extends JFrame{
                 
                 
                 if (cell.getadjacentMines() > 0) {
-                    g.setColor(Color.black);
+                    if (cell.getadjacentMines() > NUMBER_COLOR.length) {
+                        g.setColor(NUMBER_COLOR[NUMBER_COLOR.length - 1]);
+                    } else {
+                        g.setColor(NUMBER_COLOR[cell.getadjacentMines()]);
+                    }
+                    
                     g.drawString(cell.getadjacentMines() + "", x + (int)(CELL_PIXEL_SIZE * 0.35),  y + (int)(CELL_PIXEL_SIZE * 0.5));
                 }
             }
