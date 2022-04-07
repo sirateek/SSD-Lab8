@@ -36,7 +36,7 @@ public class Game extends JFrame{
 
 
         public GridUI() {
-            setPreferredSize(new Dimension(boardSize * CELL_PIXEL_SIZE, boardSize * CELL_PIXEL_SIZE));
+            setPreferredSize(new Dimension(boardSize * CELL_PIXEL_SIZE, (boardSize+2) * CELL_PIXEL_SIZE));
             imageCell = new ImageIcon("imgs/Cell.png").getImage();
             imageFlag = new ImageIcon("imgs/Flag.png").getImage();
             imageMine = new ImageIcon("imgs/Mine.png").getImage();
@@ -57,7 +57,17 @@ public class Game extends JFrame{
                             return;
                         } 
                         if (SwingUtilities.isRightMouseButton(e)) {
-                             cell.setFlagged(!cell.isFlagged());
+                            if (cell.isFlagged()){
+                                mineCount ++;
+                                cell.setFlagged(!cell.isFlagged());
+                            }
+                            else {
+                                if (mineCount != 0) {
+                                    mineCount--;
+                                    cell.setFlagged(!cell.isFlagged());
+                                }
+                            }
+
                         } else {
                             if (!cell.isFlagged()) {    
                                 board.uncover(row, col);
@@ -75,14 +85,13 @@ public class Game extends JFrame{
         @Override
         public void paint(Graphics g) {
             super.paint(g);
-            paintCell(g, 0, 0);
-            paintCell(g, 1, 1);
 
-            for (int row = 0; row< boardSize; row++) {
+            for (int row = 2; row< boardSize+2; row++) { // row+2 for include the top bar
                 for (int col= 0 ; col<boardSize; col++) {
                     paintCell(g, row, col);
                 }
             }
+            paintBar(g);
         }
     
 
@@ -120,6 +129,16 @@ public class Game extends JFrame{
                 g.drawImage(imageFlag, x, y, CELL_PIXEL_SIZE, CELL_PIXEL_SIZE, null, null);
             }
 
+        }
+
+        public void paintBar(Graphics g) {
+            g.setColor(Color.gray);
+            g.drawRect(0, 0, 600, 50);
+            g.fillRect(0,0,600, 50);
+            g.drawImage(imageFlag, 0, 0, 50, 50, null, null);
+            g.setColor(Color.white);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+            g.drawString(String.valueOf(mineCount), 40, 35);
         }
     }
 

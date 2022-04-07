@@ -3,7 +3,7 @@ import java.util.Random;
 public class Board {
     private int size;
     private Cell [][] cells;
-    private int mineCount = 40;
+    private int mineCount;
 
     private Random random = new Random();
 
@@ -16,8 +16,8 @@ public class Board {
     }
 
     private void initCells() {
-        cells = new Cell[size][size];
-        for (int row=0; row<size; row++) {
+        cells = new Cell[size+2][size];
+        for (int row=2; row<size+2; row++) {
             for (int col=0; col<size; col++) {
                 cells[row][col] = new Cell();
             }
@@ -28,7 +28,7 @@ public class Board {
     private void seedMines() {
         int seeded = 0;
         while (seeded < mineCount) {
-            int row = random.nextInt(size);
+            int row = 2 + random.nextInt(size);
             int col = random.nextInt(size);
 
             Cell cell = getCell(row, col);
@@ -66,7 +66,7 @@ public class Board {
     }
 
     private void generateNumbers() {
-        for (int row=0; row<size; row++) {
+        for (int row=2; row<size+2; row++) {
             for (int col=0; col<size; col++) {
                 Cell cell = getCell(row, col);
                 if (cell.isMine()) {
@@ -98,7 +98,7 @@ public class Board {
 
 
     public boolean mineUncovered() {
-        for (int row=0; row<size; row++) {
+        for (int row=2; row<size+2; row++) {
             for (int col=0; col<size; col++) {
                 Cell cell = getCell(row, col);
                 if (!cell.isCovered() && cell.isMine()) {
@@ -111,7 +111,7 @@ public class Board {
 
 
     public Cell getCell(int row, int col) {
-        if (row < 0 || col < 0 || row >= size || col >= size) {
+        if (row < 2 || col < 0 || row >= size+2 || col >= size) {
             return null;
         }
         return cells[row][col];
