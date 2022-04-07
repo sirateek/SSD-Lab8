@@ -53,6 +53,9 @@ public class Game extends JFrame{
                         int col = e.getX() / CELL_PIXEL_SIZE;
                         Cell cell = board.getCell(row, col);
 
+                        if (row == 0 || row ==1) {
+                            return;
+                        }
                         if (!cell.isCovered()) {
                             return;
                         } 
