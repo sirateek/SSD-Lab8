@@ -17,7 +17,7 @@ public class Board {
 
     private void initCells() {
         cells = new Cell[size+2][size];
-        for (int row=2; row<size+2; row++) {
+        for (int row=2; row<size+2; row++) { // row+2 for include the top bar
             for (int col=0; col<size; col++) {
                 cells[row][col] = new Cell();
             }
@@ -66,7 +66,7 @@ public class Board {
     }
 
     private void generateNumbers() {
-        for (int row=2; row<size+2; row++) {
+        for (int row=2; row<size+2; row++) { // row+2 for include the top bar
             for (int col=0; col<size; col++) {
                 Cell cell = getCell(row, col);
                 if (cell.isMine()) {
@@ -98,7 +98,7 @@ public class Board {
 
 
     public boolean mineUncovered() {
-        for (int row=2; row<size+2; row++) {
+        for (int row=2; row<size+2; row++) {// row+2 for include the top bar
             for (int col=0; col<size; col++) {
                 Cell cell = getCell(row, col);
                 if (!cell.isCovered() && cell.isMine()) {

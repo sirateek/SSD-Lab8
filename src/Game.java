@@ -85,13 +85,12 @@ public class Game extends JFrame{
         @Override
         public void paint(Graphics g) {
             super.paint(g);
-
             for (int row = 2; row< boardSize+2; row++) { // row+2 for include the top bar
                 for (int col= 0 ; col<boardSize; col++) {
                     paintCell(g, row, col);
                 }
             }
-            paintBar(g);
+            paintTopBar(g);
         }
     
 
@@ -131,7 +130,7 @@ public class Game extends JFrame{
 
         }
 
-        public void paintBar(Graphics g) {
+        public void paintTopBar(Graphics g) {
             g.setColor(Color.gray);
             g.drawRect(0, 0, 600, 50);
             g.fillRect(0,0,600, 50);
