@@ -4,6 +4,7 @@ public class Board {
     private int size;
     private Cell [][] cells;
     private int mineCount;
+    private int uncoverNum;
 
     private Random random = new Random();
 
@@ -48,6 +49,7 @@ public class Board {
             return; 
         }
         cell.setCovered(false);
+        uncoverNum++;
         if (cell.getadjacentMines() == 0) {
             int [][] pairs = {
                 {-1, -1}, {-1, 0}, {-1, 1},
@@ -96,6 +98,12 @@ public class Board {
         }
     }
 
+    public boolean isAllSafeCellUncorvered() {
+        if (uncoverNum == ((size*size) - mineCount)) {
+            return true;
+        }
+        return false;
+    }
 
     public boolean mineUncovered() {
         for (int row=2; row<size+2; row++) {// row+2 for include the top bar

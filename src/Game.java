@@ -6,8 +6,8 @@ import java.awt.event.*;
 
 public class Game extends JFrame{
     private Board board;
-    private int boardSize = 20;
-    private int mineCount = 40;
+    private static int boardSize = 20;
+    private static int mineCount = 5;
     private GridUI gridUI;
     public static Color[] NUMBER_COLOR = {Color.black, Color.blue, Color.green, Color.red, Color.magenta};
 
@@ -16,7 +16,6 @@ public class Game extends JFrame{
         gridUI = new GridUI();
         add(gridUI);
         pack();
-
         // board.getCell(2, 3).setFlagged(true);
 
     }
@@ -27,28 +26,40 @@ public class Game extends JFrame{
         setVisible(true);
     }
 
+    public void restart() {
+
+    }
 
     class GridUI extends JPanel {
         public static final int CELL_PIXEL_SIZE = 30;
+        private JButton button = new JButton("RESTART");
+        private int MINECOUNT = mineCount;
+        private int BOARDSIZE = boardSize;
         private Image imageCell;
         private Image imageFlag;
         private Image imageMine;
 
-
         public GridUI() {
             setPreferredSize(new Dimension(boardSize * CELL_PIXEL_SIZE, (boardSize+2) * CELL_PIXEL_SIZE));
+            this.setLayout(null);
             imageCell = new ImageIcon("imgs/Cell.png").getImage();
             imageFlag = new ImageIcon("imgs/Flag.png").getImage();
             imageMine = new ImageIcon("imgs/Mine.png").getImage();
-
+            button.setBounds(boardSize * CELL_PIXEL_SIZE- 110, 10, 100, 30);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    board = new Board(BOARDSIZE, MINECOUNT);
+                    mineCount = MINECOUNT;
+                    repaint();
+                }
+            });
+            this.add(button);
             addMouseListener(new MouseAdapter() {
 
                     @Override
                     public void mousePressed(MouseEvent e) {
                         super.mousePressed(e);
-                        
-
-            
                         int row = e.getY() / CELL_PIXEL_SIZE;
                         int col = e.getX() / CELL_PIXEL_SIZE;
                         Cell cell = board.getCell(row, col);
@@ -72,14 +83,19 @@ public class Game extends JFrame{
                             }
 
                         } else {
-                            if (!cell.isFlagged()) {    
+                            if (!cell.isFlagged()) {
                                 board.uncover(row, col);
                                 if (board.mineUncovered()) {
                                     JOptionPane.showMessageDialog(Game.this, "Loose!", "Kaboom!", JOptionPane.WARNING_MESSAGE);
                                 }
+
                             }
                         }
                         repaint();
+                        if (board.isAllSafeCellUncorvered()) {
+                            JOptionPane.showMessageDialog(Game.this, "!!!WIN!!!", "WOOH!", JOptionPane.PLAIN_MESSAGE);
+                        }
+
                     }   
             });
         }
@@ -89,20 +105,19 @@ public class Game extends JFrame{
         public void paint(Graphics g) {
             super.paint(g);
             for (int row = 2; row< boardSize+2; row++) { // row+2 for include the top bar
-                for (int col= 0 ; col<boardSize; col++) {
+                for (int col = 0; col < boardSize; col++) {
                     paintCell(g, row, col);
                 }
             }
             paintTopBar(g);
         }
-    
+
 
         public void paintCell(Graphics g, int row, int col) {
             int x = col * CELL_PIXEL_SIZE;
             int y = row * CELL_PIXEL_SIZE;
 
             Cell cell = board.getCell(row, col);
-            
             if (cell.isCovered()) {
                 g.drawImage(imageCell, x, y, CELL_PIXEL_SIZE, CELL_PIXEL_SIZE, Color.black, null);
             } else {
@@ -121,7 +136,6 @@ public class Game extends JFrame{
                     } else {
                         g.setColor(NUMBER_COLOR[cell.getadjacentMines()]);
                     }
-                    
                     g.drawString(cell.getadjacentMines() + "", x + (int)(CELL_PIXEL_SIZE * 0.35),  y + (int)(CELL_PIXEL_SIZE * 0.5));
                 }
             }
