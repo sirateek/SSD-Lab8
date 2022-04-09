@@ -56,6 +56,7 @@ public class Game extends JFrame{
                     repaint();
                 }
             });
+            this.setComponentZOrder(button, 0);
             this.add(button);
             addMouseListener(new MouseAdapter() {
 
@@ -114,6 +115,7 @@ public class Game extends JFrame{
                 }
             }
             paintTopBar(g);
+            repaint();
         }
 
 
@@ -152,11 +154,8 @@ public class Game extends JFrame{
         }
 
         public void paintTopBar(Graphics g) {
-            g.setColor(Color.gray);
-            g.drawRect(0, 0, 600, 50);
-            g.fillRect(0,0,600, 50);
             g.drawImage(imageFlag, 0, 0, 50, 50, null, null);
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
             g.drawString(String.valueOf(mineCount), 40, 35);
         }
