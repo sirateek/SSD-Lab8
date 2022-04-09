@@ -35,6 +35,7 @@ public class Game extends JFrame{
         private JButton button = new JButton("RESTART");
         private int MINECOUNT = mineCount;
         private int BOARDSIZE = boardSize;
+        private boolean gameStatus = true;
         private Image imageCell;
         private Image imageFlag;
         private Image imageMine;
@@ -51,6 +52,7 @@ public class Game extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                     board = new Board(BOARDSIZE, MINECOUNT);
                     mineCount = MINECOUNT;
+                    gameStatus = true;
                     repaint();
                 }
             });
@@ -86,13 +88,15 @@ public class Game extends JFrame{
                             if (!cell.isFlagged()) {
                                 board.uncover(row, col);
                                 if (board.mineUncovered()) {
+                                    gameStatus = false;
                                     JOptionPane.showMessageDialog(Game.this, "Loose!", "Kaboom!", JOptionPane.WARNING_MESSAGE);
                                 }
 
                             }
                         }
                         repaint();
-                        if (board.isAllSafeCellUncorvered()) {
+                        System.out.println(board.isAllSafeCellUncorvered() && gameStatus);
+                        if (board.isAllSafeCellUncorvered() && gameStatus) {
                             JOptionPane.showMessageDialog(Game.this, "!!!WIN!!!", "WOOH!", JOptionPane.PLAIN_MESSAGE);
                         }
 
